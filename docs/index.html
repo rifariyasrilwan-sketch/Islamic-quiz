@@ -61,11 +61,15 @@ load();
 
 </body>
 </html>
-const correctSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_8c8b3d2d9a.mp3");
-const wrongSound   = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_2b1b1b6e1f.mp3");
- <script>
-const correctSound = new Audio("...");
-const wrongSound   = new Audio("...");
+let correctSound;
+let wrongSound;
+
+document.body.addEventListener("click", () => {
+  if(!correctSound){
+    correctSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_8c8b3d2d9a.mp3");
+    wrongSound   = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_2b1b1b6e1f.mp3");
+  }
+},{ once:true });
 
 const quiz = [
   ...
