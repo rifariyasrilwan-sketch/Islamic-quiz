@@ -42,6 +42,7 @@ function load(){
 
 function check(ans){
   if(ans===quiz[i].answer){
+  correctSound.play();
     document.getElementById("result").innerText="✅ Correct";
     i++;
     if(i<quiz.length){
@@ -50,6 +51,7 @@ function check(ans){
       document.body.innerHTML="<h1>🎉 You completed all levels!</h1>";
     }
   } else {
+  wrongSound.play();
     document.getElementById("result").innerText="❌ Try again";
   }
 }
@@ -59,3 +61,12 @@ load();
 
 </body>
 </html>
+const correctSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_8c8b3d2d9a.mp3");
+const wrongSound   = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_2b1b1b6e1f.mp3");
+ <script>
+const correctSound = new Audio("...");
+const wrongSound   = new Audio("...");
+
+const quiz = [
+  ...
+];
