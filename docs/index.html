@@ -9,7 +9,7 @@
   </style>
 </head>
 
-<body>
+<body style="font-family:Arial;text-align:center;background:#f2f2f2;padding:20px">
 
 <h1>🕌 Islamic Quiz</h1>
 <h3 id="level">Level 1</h3>
@@ -22,17 +22,14 @@
 
 <button onclick="restart()">🔁 Restart</button>
 
-<script>
-// 🔊 Sound unlock (Android safe)
-let correctSound, wrongSound;
-document.body.addEventListener("click",()=>{
-  if(!correctSound){
-    correctSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_8c8b3d2d9a.mp3");
-    wrongSound   = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_2b1b1b6e1f.mp3");
-  }
-},{once:true});
+<!-- 🔊 Audio elements -->
+<audio id="correctSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_8c8b3d2d9a.mp3"></audio>
+<audio id="wrongSound"   src="https://cdn.pixabay.com/audio/2022/03/15/audio_2b1b1b6e1f.mp3"></audio>
 
-// 🧠 Quiz data
+<script>
+const correctSound = document.getElementById("correctSound");
+const wrongSound   = document.getElementById("wrongSound");
+
 const quiz = [
   {q:"How many times do Muslims pray daily?", options:[3,5,7], answer:5},
   {q:"How many Rak'ahs in Fajr prayer?", options:[2,4,3], answer:2},
@@ -55,25 +52,28 @@ function load(){
   quiz[i].options.forEach(o=>{
     let b=document.createElement("button");
     b.innerText=o;
-    b.onclick=()=>check(o);
+    b.style.margin="5px";
+    b.onclick=()=>check(o); // ✅ User gesture unlocks audio
     document.getElementById("buttons").appendChild(b);
   });
 
   timer=setInterval(()=>{
     time--;
     document.getElementById("timer").innerText="Time: "+time;
-    if(time==0){ wrongSound.play(); next(); }
+    if(time===0){ wrongSound.play(); next(); }
   },1000);
 }
 
 function check(ans){
   if(ans===quiz[i].answer){
+    correctSound.currentTime = 0;
     correctSound.play();
     score+=10;
     document.getElementById("score").innerText="Score: "+score;
     document.getElementById("result").innerText="✅ Correct";
     next();
   } else {
+    wrongSound.currentTime = 0;
     wrongSound.play();
     document.getElementById("result").innerText="❌ Wrong";
   }
@@ -83,11 +83,9 @@ function next(){
   clearInterval(timer);
   i++;
   if(i<quiz.length){
-    setTimeout(load,700);
+    setTimeout(load,600);
   } else {
-    document.body.innerHTML=
-      "<h1>🎉 Quiz Completed</h1><h2>Final Score: "+score+
-      "</h2><button onclick='location.reload()'>Play Again</button>";
+    document.body.innerHTML="<h1>🎉 Quiz Completed</h1><h2>Score: "+score+"</h2><button onclick='location.reload()'>Play Again</button>";
   }
 }
 
