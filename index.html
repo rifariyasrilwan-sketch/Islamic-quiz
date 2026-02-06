@@ -1,105 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Islamic Quiz Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      background: #020617;
-      color: white;
-      font-family: Arial;
-      text-align: center;
-    }
-    .box {
-      padding: 20px;
-    }
-    button {
-      display: block;
-      width: 90%;
-      margin: 10px auto;
-      padding: 15px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: none;
-      background: #22c55e;
-      color: black;
-    }
-    button:hover {
-      opacity: 0.8;
-    }
-  </style>
+  <title>Islamic Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+<body style="text-align:center;font-family:Arial">
+  <h1>🕌 Islamic Quiz</h1>
+  <p>Level 1</p>
 
-<body>
-  <div class="box">
-    <h1>🕌 Islamic Quiz</h1>
-    <h3>Level: <span id="level">1</span></h3>
-    <h2 id="question"></h2>
-    <div id="answers"></div>
-  </div>
+  <button onclick="check(1)">1</button>
+  <button onclick="check(5)">5</button>
 
-  <!-- Sounds -->
-  <audio id="correct" src="https://cdn.pixabay.com/audio/2022/03/15/audio_2a4b6b3db7.mp3"></audio>
-  <audio id="wrong" src="https://cdn.pixabay.com/audio/2022/03/15/audio_8c3b4c35e5.mp3"></audio>
+  <p id="r"></p>
 
   <script>
-    const quiz = [
-      {
-        q: "Who is the last Prophet of Islam?",
-        a: ["Isa (AS)", "Musa (AS)", "Muhammad ﷺ", "Ibrahim (AS)"],
-        c: 2
-      },
-      {
-        q: "How many daily prayers are obligatory?",
-        a: ["3", "4", "5", "6"],
-        c: 2
-      },
-      {
-        q: "Which is the holy book of Islam?",
-        a: ["Bible", "Torah", "Quran", "Zabur"],
-        c: 2
-      },
-      {
-        q: "Where was Prophet Muhammad ﷺ born?",
-        a: ["Madinah", "Taif", "Makkah", "Jerusalem"],
-        c: 2
-      }
-    ];
-
-    let level = 0;
-
-    function loadQuestion() {
-      document.getElementById("level").innerText = level + 1;
-      document.getElementById("question").innerText = quiz[level].q;
-
-      let answersHTML = "";
-      quiz[level].a.forEach((text, index) => {
-        answersHTML += `<button onclick="check(${index})">${text}</button>`;
-      });
-
-      document.getElementById("answers").innerHTML = answersHTML;
+    function check(a){
+      document.getElementById("r").innerText =
+        a===5 ? "✅ Correct" : "❌ Wrong";
     }
-
-    function check(choice) {
-      if (choice === quiz[level].c) {
-        document.getElementById("correct").play();
-        level++;
-
-        if (level < quiz.length) {
-          setTimeout(loadQuestion, 800);
-        } else {
-          alert("🎉 MashaAllah! You completed all levels!");
-          level = 0;
-          loadQuestion();
-        }
-      } else {
-        document.getElementById("wrong").play();
-        alert("❌ Wrong answer. Try again!");
-      }
-    }
-
-    loadQuestion();
   </script>
 </body>
 </html>
