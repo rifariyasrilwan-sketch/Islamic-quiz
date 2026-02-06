@@ -3,57 +3,98 @@
 <head>
   <title>Islamic Quiz Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:Arial;text-align:center;background:#f2f2f2;padding:20px}
+    button{padding:10px 15px;margin:6px;font-size:16px}
+  </style>
 </head>
 
-<body style="font-family:Arial;text-align:center;background:#f2f2f2;padding:20px">
+<body>
 
 <h1>🕌 Islamic Quiz</h1>
 <h3 id="level">Level 1</h3>
+<h3 id="timer">Time: 10</h3>
+<h3 id="score">Score: 0</h3>
 
 <p id="question"></p>
-
 <div id="buttons"></div>
-
 <p id="result"></p>
 
+<button onclick="restart()">🔁 Restart</button>
+
 <script>
+// 🔊 Sound unlock (Android safe)
+let correctSound, wrongSound;
+document.body.addEventListener("click",()=>{
+  if(!correctSound){
+    correctSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_8c8b3d2d9a.mp3");
+    wrongSound   = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_2b1b1b6e1f.mp3");
+  }
+},{once:true});
+
+// 🧠 Quiz data
 const quiz = [
   {q:"How many times do Muslims pray daily?", options:[3,5,7], answer:5},
   {q:"How many Rak'ahs in Fajr prayer?", options:[2,4,3], answer:2},
   {q:"Which month do Muslims fast?", options:["Muharram","Ramadan","Hajj"], answer:"Ramadan"},
-  {q:"Where was Prophet Muhammad ﷺ born?", options:["Madinah","Makkah","Taif"], answer:"Makkah"}
+  {q:"Where was Prophet Muhammad ﷺ born?", options:["Madinah","Makkah","Taif"], answer:"Makkah"},
+  {q:"What is the holy book of Islam?", options:["Bible","Qur'an","Torah"], answer:"Qur'an"}
 ];
 
-let i = 0;
+let i=0, score=0, time=10, timer;
 
 function load(){
-  document.getElementById("question").innerText = quiz[i].q;
-  document.getElementById("level").innerText = "Level " + (i+1);
-  document.getElementById("buttons").innerHTML = "";
+  clearInterval(timer);
+  time=10;
+  document.getElementById("timer").innerText="Time: "+time;
+  document.getElementById("question").innerText=quiz[i].q;
+  document.getElementById("level").innerText="Level "+(i+1);
+  document.getElementById("buttons").innerHTML="";
+  document.getElementById("result").innerText="";
 
   quiz[i].options.forEach(o=>{
     let b=document.createElement("button");
     b.innerText=o;
-    b.style.margin="5px";
     b.onclick=()=>check(o);
     document.getElementById("buttons").appendChild(b);
   });
+
+  timer=setInterval(()=>{
+    time--;
+    document.getElementById("timer").innerText="Time: "+time;
+    if(time==0){ wrongSound.play(); next(); }
+  },1000);
 }
 
 function check(ans){
   if(ans===quiz[i].answer){
-  correctSound.play();
+    correctSound.play();
+    score+=10;
+    document.getElementById("score").innerText="Score: "+score;
     document.getElementById("result").innerText="✅ Correct";
-    i++;
-    if(i<quiz.length){
-      setTimeout(()=>{document.getElementById("result").innerText="";load();},800);
-    } else {
-      document.body.innerHTML="<h1>🎉 You completed all levels!</h1>";
-    }
+    next();
   } else {
-  wrongSound.play();
-    document.getElementById("result").innerText="❌ Try again";
+    wrongSound.play();
+    document.getElementById("result").innerText="❌ Wrong";
   }
+}
+
+function next(){
+  clearInterval(timer);
+  i++;
+  if(i<quiz.length){
+    setTimeout(load,700);
+  } else {
+    document.body.innerHTML=
+      "<h1>🎉 Quiz Completed</h1><h2>Final Score: "+score+
+      "</h2><button onclick='location.reload()'>Play Again</button>";
+  }
+}
+
+function restart(){
+  i=0; score=0;
+  document.getElementById("score").innerText="Score: 0";
+  load();
 }
 
 load();
@@ -61,16 +102,3 @@ load();
 
 </body>
 </html>
-let correctSound;
-let wrongSound;
-
-document.body.addEventListener("click", () => {
-  if(!correctSound){
-    correctSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_8c8b3d2d9a.mp3");
-    wrongSound   = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_2b1b1b6e1f.mp3");
-  }
-},{ once:true });
-
-const quiz = [
-  ...
-];
