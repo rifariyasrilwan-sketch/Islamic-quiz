@@ -1,23 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Islamic Quiz</title>
+  <title>Islamic Quiz Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body style="text-align:center;font-family:Arial">
-  <h1>🕌 Islamic Quiz</h1>
-  <p>Level 1</p>
 
-  <button onclick="check(1)">1</button>
-  <button onclick="check(5)">5</button>
+<body style="font-family:Arial;text-align:center;background:#f2f2f2;padding:20px">
 
-  <p id="r"></p>
+<h1>🕌 Islamic Quiz</h1>
+<h3 id="level">Level 1</h3>
 
-  <script>
-    function check(a){
-      document.getElementById("r").innerText =
-        a===5 ? "✅ Correct" : "❌ Wrong";
+<p id="question"></p>
+
+<div id="buttons"></div>
+
+<p id="result"></p>
+
+<script>
+const quiz = [
+  {q:"How many times do Muslims pray daily?", options:[3,5,7], answer:5},
+  {q:"How many Rak'ahs in Fajr prayer?", options:[2,4,3], answer:2},
+  {q:"Which month do Muslims fast?", options:["Muharram","Ramadan","Hajj"], answer:"Ramadan"},
+  {q:"Where was Prophet Muhammad ﷺ born?", options:["Madinah","Makkah","Taif"], answer:"Makkah"}
+];
+
+let i = 0;
+
+function load(){
+  document.getElementById("question").innerText = quiz[i].q;
+  document.getElementById("level").innerText = "Level " + (i+1);
+  document.getElementById("buttons").innerHTML = "";
+
+  quiz[i].options.forEach(o=>{
+    let b=document.createElement("button");
+    b.innerText=o;
+    b.style.margin="5px";
+    b.onclick=()=>check(o);
+    document.getElementById("buttons").appendChild(b);
+  });
+}
+
+function check(ans){
+  if(ans===quiz[i].answer){
+    document.getElementById("result").innerText="✅ Correct";
+    i++;
+    if(i<quiz.length){
+      setTimeout(()=>{document.getElementById("result").innerText="";load();},800);
+    } else {
+      document.body.innerHTML="<h1>🎉 You completed all levels!</h1>";
     }
-  </script>
+  } else {
+    document.getElementById("result").innerText="❌ Try again";
+  }
+}
+
+load();
+</script>
+
 </body>
 </html>
